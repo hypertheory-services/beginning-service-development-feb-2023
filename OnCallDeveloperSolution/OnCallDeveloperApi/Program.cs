@@ -1,5 +1,6 @@
 
 
+using OnCallDeveloperApi.Adapters;
 using OnCallDeveloperApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Hey, API, if you run any code that needs an ISystemTime, use this class.
+builder.Services.AddSingleton<ISystemTime, SystemTime>();
+
 var app = builder.Build();
 
 // The builder "builds" our configured application - and we can program the "request pipeline here"
@@ -24,11 +28,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/oncalldeveloper", () =>
+app.MapGet("/oncalldeveloper", (ISystemTime systemTime) =>
 {
-    var contact = new OnCallDeveloperContact("Bob", "Smith", "Bob@aol.com", "xt123");
-    var response = new OnCallDeveloperResponse(contact);
-    return Results.Ok(response); // this will return a 200 OK response.
+    // if it is during the business time, this what we send
+    var now = systemTime.GetCurrent();
+    if (now.Hour >= 9 && now.Hour < 17)
+    {
+        var contact = new OnCallDeveloperContact("Bob", "Smith", "Bob@aol.com", "xt123");
+        var response = new OnCallDeveloperResponse(contact);
+        // else - we are going to tell them to call the help desk service.
+        return Results.Ok(response); // this will return a 200 OK response.
+    } else
+    {
+        var contact = new OnCallServiceResponseContact("Our Help Service", "800 555-5555", "helpdesk@aol.com");
+        var response = new OnCallServiceResponse(contact);
+        // else - we are going to tell them to call the help desk service.
+        return Results.Ok(response); // this will return a 200 OK response.
+    }
 });
 
 app.Run(); // This is a "Blocking Call"

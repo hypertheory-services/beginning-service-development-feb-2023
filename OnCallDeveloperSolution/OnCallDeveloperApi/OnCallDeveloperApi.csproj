@@ -11,4 +11,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+	<!-- only to do this you are using top-level statements in your API -->
+	<ItemGroup>
+		<InternalsVisibleTo Include="OnCallDeveloperApi.IntegrationTests"/>
+	</ItemGroup>
 </Project>
