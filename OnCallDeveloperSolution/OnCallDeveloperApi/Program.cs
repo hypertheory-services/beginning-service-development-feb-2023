@@ -1,3 +1,7 @@
+
+
+using OnCallDeveloperApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // the builder is the thing we use to configure our application "behind the scenes" - this is mostly hooking up
@@ -22,7 +26,9 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/oncalldeveloper", () =>
 {
-    return Results.Ok(); // this will return a 200 OK response.
+    var contact = new OnCallDeveloperContact("Bob", "Smith", "Bob@aol.com", "xt123");
+    var response = new OnCallDeveloperResponse(contact);
+    return Results.Ok(response); // this will return a 200 OK response.
 });
 
 app.Run(); // This is a "Blocking Call"

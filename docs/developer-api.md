@@ -44,3 +44,18 @@ Right now, just Monday-Friday, 9:00 AM - 5:00 PM
 
 Are the "data" that goes to the API or FROM the API.
 
+GET /oncalldeveloper
+
+200 Ok
+
+```json
+{
+    "contact": {
+        "firstName": "Bob",
+        "lastName": "Smith",
+        "email": "bob@aol.com",
+        "phoneNumber": "ext123"
+    }
+}
+
+```
