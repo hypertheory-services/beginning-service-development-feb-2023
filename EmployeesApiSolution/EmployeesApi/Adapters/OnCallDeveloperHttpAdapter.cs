@@ -10,9 +10,9 @@ public class OnCallDeveloperHttpAdapter
         _httpClient = httpClient;
     }
 
-    public async Task<GetOnCallDeveloperResponse> GetOnCallDeveloperAsync()
+    public async Task< GetOnCallDeveloperResponse> GetOnCallDeveloperAsync()
     {
-        var response = await _httpClient.GetAsync("/oncalldeveloper");
+        var response = await  _httpClient.GetAsync("/oncalldeveloper");
         response.EnsureSuccessStatusCode(); // Weird. 
 
         var content = await response.Content.ReadFromJsonAsync<GetOnCallDeveloperResponse>();

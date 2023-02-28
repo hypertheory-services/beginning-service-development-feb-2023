@@ -1,3 +1,4 @@
+using EmployeesApi;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<OnCallDeveloperHttpAdapter>(client =>
 {
     client.BaseAddress = new Uri("http://localhost:8080"); // BAD DON'T DO THIS.
-});
+})
+    .AddPolicyHandler(SrePolicies.GetDefaultRetryPolicy())
+.AddPolicyHandler(SrePolicies.GetDefaultCircuitBreaker());
 
 var app = builder.Build();
 

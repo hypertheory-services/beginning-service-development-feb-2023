@@ -15,8 +15,17 @@ public class StatusController : ControllerBase
     [HttpGet("/status")]
     public async Task<ActionResult> GetStatus()
     {
-        var onCallDeveloperResponse = await _onCallDeveloperAdapter.GetOnCallDeveloperAsync();
-        var contact = new GetStatusContactInfo(onCallDeveloperResponse.Contact.Name, onCallDeveloperResponse.Contact.PhoneNumber, onCallDeveloperResponse.Contact.Email);
+        GetStatusContactInfo? contact;
+        try
+        {
+            var onCallDeveloperResponse = await _onCallDeveloperAdapter.GetOnCallDeveloperAsync();
+            contact = new GetStatusContactInfo(onCallDeveloperResponse.Contact.Name, onCallDeveloperResponse.Contact.PhoneNumber, onCallDeveloperResponse.Contact.Email);
+        }
+        catch (Exception)
+        {
+
+            contact = null;
+        }
         var response = new GetStatusResponse
         {
             Message = "Looks good",
