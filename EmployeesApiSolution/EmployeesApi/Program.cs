@@ -12,6 +12,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// one of these PER adadpter
+builder.Services.AddHttpClient<OnCallDeveloperHttpAdapter>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:8080"); // BAD DON'T DO THIS.
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
