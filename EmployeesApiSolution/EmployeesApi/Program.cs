@@ -13,10 +13,16 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var oncallDeveloperUri = builder.Configuration.GetValue<string>("developer-api");
+if(oncallDeveloperUri == null)
+{
+    // don't start this api! This isn't set.
+    throw new ApplicationException("Can't start API, no URI for the Developer API");
+}
 // one of these PER adadpter
 builder.Services.AddHttpClient<OnCallDeveloperHttpAdapter>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:8080"); // BAD DON'T DO THIS.
+    client.BaseAddress = new Uri(oncallDeveloperUri); // BAD DON'T DO THIS.
 })
     .AddPolicyHandler(SrePolicies.GetDefaultRetryPolicy())
 .AddPolicyHandler(SrePolicies.GetDefaultCircuitBreaker());
