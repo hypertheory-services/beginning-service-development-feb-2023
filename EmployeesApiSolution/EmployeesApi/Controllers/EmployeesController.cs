@@ -13,15 +13,38 @@ public class EmployeesController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("/employees/summary")]
-    public async Task<ActionResult> GetEmployeeSummary()
+    //[HttpGet("/employees/summary")]
+    //public async Task<ActionResult> GetEmployeeSummary()
+    //{
+    //    return Ok(); // in here give other developers what they need.
+    //}
+
+    [HttpGet("/employees/{employeeId:int}")]
+    public async Task<ActionResult> GetEmployeeDetails(int employeeId)
     {
-        return Ok(); // in here give other developers what they need.
+        var response = await _context.Employees
+                .Where(emp => emp.Id == employeeId)
+                .Select(emp => new GetEmployeeDetailsItem
+                {
+                    Id = emp.Id.ToString(),
+                    FirstName = emp.FirstName,
+                    LastName = emp.LastName,
+                    Email = emp.Email ?? "No Email Provided",
+                    Salary = emp.Salary
+                }).SingleOrDefaultAsync();
+        if(response == null)
+        {
+            return NotFound(); // 404
+        } else
+        {
+            return Ok(response);
+        }
     }
+
 
     // GET /employees
     [HttpGet("/employees")]
-    public async Task<ActionResult> GetAllEmployees()
+    public async Task<ActionResult<GetEmployeeSummary>> GetAllEmployees()
     {
         var employees = await _context.Employees.OrderBy(e=> e.LastName)
             .Select(emp => new GetEmployeeSummaryItem
