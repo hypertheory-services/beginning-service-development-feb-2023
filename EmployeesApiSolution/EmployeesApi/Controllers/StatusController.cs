@@ -17,6 +17,7 @@ public class StatusController : ControllerBase
     [HttpGet("/status")]
     public async Task<ActionResult> GetStatus()
     {
+       
         GetStatusContactInfo? contact;
         try
         {
@@ -27,6 +28,7 @@ public class StatusController : ControllerBase
         }
         catch (Exception)
         {
+           
 
             contact = null;
         }
