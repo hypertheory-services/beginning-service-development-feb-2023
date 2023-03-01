@@ -19,7 +19,7 @@ if(oncallDeveloperUri == null)
     // don't start this api! This isn't set.
     throw new ApplicationException("Can't start API, no URI for the Developer API");
 }
-// one of these PER adadpter
+// one of these PER adadpter (Lazy Initialization)
 builder.Services.AddHttpClient<OnCallDeveloperHttpAdapter>(client =>
 {
     client.BaseAddress = new Uri(oncallDeveloperUri); // BAD DON'T DO THIS.
@@ -40,5 +40,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// This line Jeff Was Here Hello World
 app.Run();

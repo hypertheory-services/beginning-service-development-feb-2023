@@ -1,0 +1,16 @@
+version: "3"
+services:
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=TokyoJoe138!
+    ports:
+      - 1433:1433
+  oncalldeveloperapi:
+    image: jeffrygonzalez/oncall-api-feb-2023:v0.1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 8080:80
+

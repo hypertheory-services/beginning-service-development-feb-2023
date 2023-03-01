@@ -15,7 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Hey, API, if you run any code that needs an ISystemTime, use this class.
-builder.Services.AddSingleton<ISystemTime, SystemTime>();
+
+builder.Services.AddTransient<ISystemTime, SystemTime>(); // Lazy!
+
 
 var app = builder.Build();
 
@@ -28,7 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/oncalldeveloper", (ISystemTime systemTime) =>
+app.MapGet("/oncalldeveloper", async (ISystemTime systemTime) =>
 {
     // if it is during the business time, this what we send
     var now = systemTime.GetCurrent();

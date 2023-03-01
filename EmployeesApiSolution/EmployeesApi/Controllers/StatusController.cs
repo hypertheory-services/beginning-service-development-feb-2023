@@ -12,13 +12,17 @@ public class StatusController : ControllerBase
         _onCallDeveloperAdapter = callDeveloperHttpAdapter;
     }
 
+
+
     [HttpGet("/status")]
     public async Task<ActionResult> GetStatus()
     {
         GetStatusContactInfo? contact;
         try
         {
+            
             var onCallDeveloperResponse = await _onCallDeveloperAdapter.GetOnCallDeveloperAsync();
+
             contact = new GetStatusContactInfo(onCallDeveloperResponse.Contact.Name, onCallDeveloperResponse.Contact.PhoneNumber, onCallDeveloperResponse.Contact.Email);
         }
         catch (Exception)
