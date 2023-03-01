@@ -42,7 +42,7 @@ app.MapGet("/oncalldeveloper", async (ISystemTime systemTime) =>
         return Results.Ok(response); // this will return a 200 OK response.
     } else
     {
-        var contact = new OnCallServiceResponseContact("Our Help Service", "800 555-5555", "helpdesk@aol.com");
+        var contact = new OnCallServiceResponseContact("Buzz Off, Nobody Cares. Good Luck", "", "");
         var response = new OnCallServiceResponse(contact);
         // else - we are going to tell them to call the help desk service.
         return Results.Ok(response); // this will return a 200 OK response.

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employees-api
+spec:
+  selector:
+    matchLabels:
+      app: employees-api
+  template:
+    metadata:
+      labels:
+        app: employees-api
+    spec:
+      containers:
+      - name: employees-api
+        image: jeffrygonzalez/employee-api-feb-2023:v0.1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        env:
+          - name: developer-api
+            value: "http://on-call-developer-api-service"
+          - name: ConnectionString__employees
+            value: 'the real connection string to the database'
