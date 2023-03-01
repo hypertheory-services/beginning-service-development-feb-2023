@@ -1,5 +1,7 @@
 ﻿
 
+using EmployeesApi.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeesApi.Controllers;
@@ -13,6 +15,36 @@ public class EmployeesController : ControllerBase
         _context = context;
     }
 
+    [HttpPost("/employees")]
+    public async Task<ActionResult<GetEmployeeDetailsItem>> AddEmployee([FromBody] PostEmployeeCreate request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        else
+        {
+            var employeeToAdd = new EmployeeEntity
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Salary = request.Salary,
+                Email = request.Email
+            };
+            _context.Employees.Add(employeeToAdd);
+            await _context.SaveChangesAsync(); // after this line of course, employeToAdd will have an ID
+            var response = new GetEmployeeDetailsItem
+            {
+                Id = employeeToAdd.Id.ToString(),
+                FirstName = employeeToAdd.FirstName,
+                LastName = employeeToAdd.LastName,
+                Email = employeeToAdd.Email ?? "No Email Provided",
+                Salary = employeeToAdd.Salary
+            };
+            return StatusCode(201, response); // oops! send an domain class to the client.
+        }
+    }
+
     //[HttpGet("/employees/summary")]
     //public async Task<ActionResult> GetEmployeeSummary()
     //{
@@ -20,6 +52,7 @@ public class EmployeesController : ControllerBase
     //}
 
     [HttpGet("/employees/{employeeId:int}")]
+ 
     public async Task<ActionResult> GetEmployeeDetails(int employeeId)
     {
         var response = await _context.Employees
@@ -43,6 +76,7 @@ public class EmployeesController : ControllerBase
 
 
     // GET /employees
+    //[Authorize]
     [HttpGet("/employees")]
     public async Task<ActionResult<GetEmployeeSummary>> GetAllEmployees()
     {
